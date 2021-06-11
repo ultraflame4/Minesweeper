@@ -8,7 +8,10 @@ window.addEventListener("load",()=>{
         document.getElementById("generateConfigContainer").style.display="none"
     })
 
+
+    let isFirstTile = false
     document.getElementById("generateField").addEventListener("click",()=>{
+        isFirstTile = true
         let height = parseInt((<HTMLInputElement>document.getElementById("fieldHeightInput")).value)
         let width = parseInt((<HTMLInputElement>document.getElementById("fieldWidthInput")).value)
         let totalNoTiles = height*width
@@ -41,7 +44,7 @@ window.addEventListener("load",()=>{
     })
 
 
-    function exposeTile(e){ // returns true if bomb
+    function exposeTile(e,exposeNeighbours=false){ // returns true if bomb
         // If not bomb, check surroundings for bomb (and count them). set no of bomb to text
         let neighbourBombs= 0
 
@@ -58,11 +61,16 @@ window.addEventListener("load",()=>{
             for (let j = 0; j < 3; j++) {
                 let x = j-1+selfX
                 let id_text = 'fieldTileId-'+x+"x"+y
-                let neighbourTile = document.getElementById(id_text)
+                let neighbourTile = (<HTMLButtonElement>document.getElementById(id_text))
 
 
                 if (neighbourTile==null){
                     continue;
+                }
+
+                if (exposeNeighbours){
+                    exposeTile(neighbourTile)
+                    neighbourTile.disabled = true
                 }
 
                 if (neighbourTile.dataset.isbomb==="true"){
@@ -77,6 +85,7 @@ window.addEventListener("load",()=>{
         e.textContent=neighbourBombs.toString()
         return false
     }
+
 
 
     function exposeField(){
@@ -94,7 +103,7 @@ window.addEventListener("load",()=>{
 
 
     function tileClicked(e:HTMLButtonElement){
-        if (exposeTile(e)){
+        if (exposeTile(e,isFirstTile) && !isFirstTile){
             setTimeout(()=>{
                 if (!confirm("Boom! Dead.\nYou stepped on a landmine and exploded.\nDo you want to continue? " +
                     "\n(Click OK to resume game and CANCEL to quit)")){
@@ -103,6 +112,7 @@ window.addEventListener("load",()=>{
             },400)
 
         }
+        isFirstTile=false
 
         e.disabled=true
     }
