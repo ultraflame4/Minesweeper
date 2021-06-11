@@ -65,7 +65,7 @@ input[type="number"]{
 }
 
 .fieldTile{
-    height: 4em;
-    width: 4em;
+    height: 6vmin;
+    width: 6vmin;
 }
 
