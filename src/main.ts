@@ -37,7 +37,7 @@ window.addEventListener("load",()=>{
 
             fieldContainer.append(fieldRow)
         }
-
+        document.getElementById("closeConfigButton").click() //Qol close menu
     })
 
 
