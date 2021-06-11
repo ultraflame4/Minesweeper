@@ -16,7 +16,7 @@ window.addEventListener("load",()=>{
         let width = parseInt((<HTMLInputElement>document.getElementById("fieldWidthInput")).value)
         let totalNoTiles = height*width
         // Math.random() * (max - min) + min; returns random no between max and min
-        let bombCount =  Math.round(totalNoTiles/5)
+        let bombCount =  Math.round(totalNoTiles/4)
 
         let fieldContainer = (<HTMLDivElement>document.getElementById("minefieldContainer"))
         fieldContainer.innerHTML=""
@@ -47,11 +47,7 @@ window.addEventListener("load",()=>{
     function exposeTile(e,exposeNeighbours=false){ // returns true if bomb
         // If not bomb, check surroundings for bomb (and count them). set no of bomb to text
         let neighbourBombs= 0
-
-        if (e.dataset.isbomb=="true"){
-            e.textContent="X"
-            return true
-        }
+        let isBomb = false
 
         let selfY = parseInt(e.dataset.y)
         let selfX = parseInt(e.dataset.x)
@@ -80,10 +76,13 @@ window.addEventListener("load",()=>{
             }
         }
 
-
-
         e.textContent=neighbourBombs.toString()
-        return false
+
+        if (e.dataset.isbomb=="true"){
+            e.textContent="X"
+            isBomb=true
+        }
+        return isBomb
     }
 
 
