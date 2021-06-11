@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./dist/bundle.js"></script>
+    <link href="css/main.css" rel="stylesheet">
+    <title>Minesweeper</title>
+    
+    
+    
+</head>
+<body>
+
+<div id="content-container" class="column">
+    <!-- Header -->
+    <div class="row" style="background-color: black;padding: 1em;font-size: .8em;height: 5em;align-items: center">
+        <h1>Minesweeper</h1>
+        <button style="justify-self: flex-end;margin-left: auto;height: 100%;width: 10em" id="openGeneratePopup">Generate</button>
+    </div>
+    
+    <div class="column" id="generateConfigContainer">
+        <div class="row">
+            <button style="justify-self: flex-end;margin-left: auto;height: 2em;width: 3em;padding:.5em;text-align: center" id="closeConfigButton">X</button>
+        </div>
+        <br>
+        <div class="row" style="align-items: baseline">
+            <h3>Field Size: </h3>
+            <input id="fieldWidthInput" type="number" style="margin: 0 .5em 0 .5em" value="10">
+            x
+            <input id="fieldHeightInput" type="number" style="margin: 0 .5em 0 .5em" value="10">
+        </div>
+        <div class="row" style="justify-content: center;margin-top: auto;margin-bottom:1em;justify-self: flex-end">
+            <button style="width:8em;height: 3em" id="generateField">Generate</button>
+        </div>
+    </div>
+    
+    <div id="minefieldContainer" class="column"></div>
+    
+</div>
+
+
+</body>
+</html>
