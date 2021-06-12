@@ -31,10 +31,18 @@ window.addEventListener("load",()=>{
                 button.dataset.x=j.toString()
                 button.dataset.y=i.toString()
                 button.className="fieldTile"
+
+                button.addEventListener("contextmenu",ev => {// Get right click
+                    ev.preventDefault()
+                    flagTile(button)
+                })
+
                 button.addEventListener('click',(ev) => {
                     tileClicked(button)
                 })
+
                 button.dataset.isbomb=(Math.random()<(bombCount/totalNoTiles)).toString()
+                button.dataset.isflagged="false"
                 fieldRow.append(button)
             }
 
@@ -102,6 +110,11 @@ window.addEventListener("load",()=>{
 
 
     function tileClicked(e:HTMLButtonElement){
+        if (e.dataset.isflagged==="true"){ //Check if tile is flagged. If true, do nothing.
+            return
+        }
+
+
         if (exposeTile(e,isFirstTile) && !isFirstTile){
             setTimeout(()=>{
                 if (!confirm("Boom! Dead.\nYou stepped on a landmine and exploded.\nDo you want to continue? " +
@@ -114,6 +127,21 @@ window.addEventListener("load",()=>{
         isFirstTile=false
 
         e.disabled=true
+    }
+
+    function flagTile(e:HTMLButtonElement){
+        if (e.disabled){ // Check if tile is already exposed
+            return
+        }
+
+        if (e.dataset.isflagged==="true"){
+            e.dataset.isflagged="false"
+            e.textContent=""
+        }
+        else {
+            e.dataset.isflagged="true"
+            e.textContent="F"
+        }
     }
 })
 

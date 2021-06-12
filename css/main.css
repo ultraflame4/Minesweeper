@@ -69,3 +69,6 @@ input[type="number"]{
     width: 6vmin;
 }
 
+.fieldTile[data-isflagged="true"]{
+    color: #C00;
+}
