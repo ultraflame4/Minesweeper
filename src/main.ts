@@ -15,10 +15,11 @@ window.addEventListener("load",()=>{
         let height = parseInt((<HTMLInputElement>document.getElementById("fieldHeightInput")).value)
         let width = parseInt((<HTMLInputElement>document.getElementById("fieldWidthInput")).value)
         let totalNoTiles = height*width
-        // Math.random() * (max - min) + min; returns random no between max and min
-        let bombCount =  Math.round(totalNoTiles/4)
 
         let fieldContainer = (<HTMLDivElement>document.getElementById("minefieldContainer"))
+
+
+        let bombProb = 0.25
         fieldContainer.innerHTML=""
 
         for (let i = 0; i < height; i++) {
@@ -41,7 +42,7 @@ window.addEventListener("load",()=>{
                     tileClicked(button)
                 })
 
-                button.dataset.isbomb=(Math.random()<(bombCount/totalNoTiles)).toString()
+                button.dataset.isbomb=(Math.random()<bombProb).toString()
                 button.dataset.isflagged="false"
                 fieldRow.append(button)
             }
@@ -50,6 +51,9 @@ window.addEventListener("load",()=>{
         }
         document.getElementById("closeConfigButton").click() //Qol close menu
     })
+
+
+
 
 
     function exposeTile(e,exposeNeighbours=false){ // returns true if bomb
@@ -73,6 +77,9 @@ window.addEventListener("load",()=>{
                 }
 
                 if (exposeNeighbours){
+                    if (neighbourTile.dataset.isbomb==="true"){
+                        neighbourTile.dataset.isbomb="false"
+                    }
                     exposeTile(neighbourTile)
                     neighbourTile.disabled = true
                 }
