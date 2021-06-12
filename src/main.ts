@@ -12,11 +12,13 @@ window.addEventListener("load",()=>{
     let isFirstTile = false
     let totalBombCount = 0
     let uncoveredBombCount = 0
+    let usedFlags = 0
 
     document.getElementById("generateField").addEventListener("click",()=>{
 
         totalBombCount = 0
         uncoveredBombCount = 0
+        usedFlags = 0
 
         isFirstTile = true
         let height = parseInt((<HTMLInputElement>document.getElementById("fieldHeightInput")).value)
@@ -170,14 +172,19 @@ window.addEventListener("load",()=>{
         if (e.disabled){ // Check if tile is already exposed
             return
         }
+        else if(isFirstTile){ // Check if on first Tile click
+            return;
+        }
 
         if (e.dataset.isflagged==="true"){
             e.dataset.isflagged="false"
             e.textContent=""
+            usedFlags--
         }
         else {
             e.dataset.isflagged="true"
             e.textContent="F"
+            usedFlags++
             if (e.dataset.isbomb==="true") {
                 uncoveredBombCount++
                 if ((<HTMLInputElement>document.getElementById("checkFlag")).checked){
@@ -190,7 +197,7 @@ window.addEventListener("load",()=>{
     }
 
     function checkWin(){
-        if (uncoveredBombCount>=totalBombCount){
+        if (uncoveredBombCount>=totalBombCount&&usedFlags==uncoveredBombCount){
             console.log(uncoveredBombCount,totalBombCount)
             exposeField()
             setTimeout(()=>{
