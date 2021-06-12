@@ -10,7 +10,14 @@ window.addEventListener("load",()=>{
 
 
     let isFirstTile = false
+    let totalBombCount = 0
+    let uncoveredBombCount = 0
+
     document.getElementById("generateField").addEventListener("click",()=>{
+
+        totalBombCount = 0
+        uncoveredBombCount = 0
+
         isFirstTile = true
         let height = parseInt((<HTMLInputElement>document.getElementById("fieldHeightInput")).value)
         let width = parseInt((<HTMLInputElement>document.getElementById("fieldWidthInput")).value)
@@ -42,7 +49,15 @@ window.addEventListener("load",()=>{
                     tileClicked(button)
                 })
 
-                button.dataset.isbomb=(Math.random()<bombProb).toString()
+
+                let isBomb = (Math.random()<bombProb)
+                if (isBomb){
+                    button.dataset.isbomb = isBomb.toString()
+                    //Increase totalBombCount
+                    totalBombCount++
+                }
+
+
                 button.dataset.isflagged="false"
                 fieldRow.append(button)
             }
@@ -82,6 +97,7 @@ window.addEventListener("load",()=>{
                 if (exposeNeighbours){
                     if (neighbourTile.dataset.isbomb==="true"){
                         neighbourTile.dataset.isbomb="false"
+                        totalBombCount--
                         reEvaluate=true // There is a need to run this function again.
                                         // Some neightbour tile bombcount may be wrong as they were set in the
                                         // prev iteration before the bomb was remove from the tile
@@ -134,6 +150,7 @@ window.addEventListener("load",()=>{
 
 
         if (exposeTile(e,isFirstTile) && !isFirstTile){
+            uncoveredBombCount++
             setTimeout(()=>{
                 if (!confirm("Boom! Dead.\nYou stepped on a landmine and exploded.\nDo you want to continue? " +
                     "\n(Click OK to resume game and CANCEL to quit)")){
@@ -145,6 +162,8 @@ window.addEventListener("load",()=>{
         isFirstTile=false
 
         e.disabled=true
+
+        checkWin()
     }
 
     function flagTile(e:HTMLButtonElement){
@@ -159,6 +178,25 @@ window.addEventListener("load",()=>{
         else {
             e.dataset.isflagged="true"
             e.textContent="F"
+            if (e.dataset.isbomb==="true") {
+                uncoveredBombCount++
+                if ((<HTMLInputElement>document.getElementById("checkFlag")).checked){
+                    e.textContent="B"
+                }
+            }
+        }
+
+        checkWin()
+    }
+
+    function checkWin(){
+        if (uncoveredBombCount>=totalBombCount){
+            console.log(uncoveredBombCount,totalBombCount)
+            exposeField()
+            setTimeout(()=>{
+                alert("Congratulations!\nYou have successfuly uncovered all mines.\nClick generate to create a new game")
+            },400)
+
         }
     }
 })
