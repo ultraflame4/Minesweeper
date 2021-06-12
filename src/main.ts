@@ -64,6 +64,9 @@ window.addEventListener("load",()=>{
         let selfY = parseInt(e.dataset.y)
         let selfX = parseInt(e.dataset.x)
 
+        let reEvaluate = false // When true, function is called again
+
+
         for (let i = 0; i < 3; i++) {
             let y = i-1+selfY
             for (let j = 0; j < 3; j++) {
@@ -79,6 +82,9 @@ window.addEventListener("load",()=>{
                 if (exposeNeighbours){
                     if (neighbourTile.dataset.isbomb==="true"){
                         neighbourTile.dataset.isbomb="false"
+                        reEvaluate=true // There is a need to run this function again.
+                                        // Some neightbour tile bombcount may be wrong as they were set in the
+                                        // prev iteration before the bomb was remove from the tile
                     }
                     exposeTile(neighbourTile)
                     neighbourTile.disabled = true
@@ -97,6 +103,11 @@ window.addEventListener("load",()=>{
             e.textContent="X"
             isBomb=true
         }
+
+        if (reEvaluate){
+            return exposeTile(e,exposeNeighbours)
+        }
+
         return isBomb
     }
 
